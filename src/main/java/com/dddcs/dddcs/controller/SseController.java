@@ -20,7 +20,7 @@ import java.util.List;
 public class SseController {
     /**
      * 跳转到see.html
-     * http://192.168.13.146:8889/sse
+     * http://127.0.0.1:8889/sse
      */
     @RequestMapping("/sse")
     public String sse() {
