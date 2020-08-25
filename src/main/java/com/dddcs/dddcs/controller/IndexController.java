@@ -10,6 +10,9 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
+/**
+ * 首页
+ */
 @Controller
 public class IndexController {
 
@@ -17,15 +20,15 @@ public class IndexController {
     /**
      * http://127.0.0.1:8889/flux
      */
-    @GetMapping("flux")
+    @GetMapping("/flux")
     @ResponseBody
     public Flux<String> flux() {
-        return Flux.just("hello\n        ", "webflux\n       ", "spring\n       ", "boot\n       ").delayElements(Duration.ofSeconds(1));
+        return Flux.just("hello", "webflux", "spring", "boot").delayElements(Duration.ofSeconds(1));
     }
     /**
      * http://127.0.0.1:8889/flux
      */
-    @GetMapping("Mono")
+    @GetMapping("/Mono")
     @ResponseBody
     public Mono<String> findById( ) {
         return Mono.just("Mono");

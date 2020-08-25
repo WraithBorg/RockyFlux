@@ -11,26 +11,26 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <script>
-        //记录加载次数
         var time = 1;
         if (typeof (EventSource) !== "undefined") {
-            var source = new EventSource("/sse/countDown");
+            var source = new EventSource("/good/countDown");
             console.log(source);
             source.addEventListener("countDown", function (e) {
                 document.getElementById("result").innerHTML = e.data;
             }, false);//使用false表示在冒泡阶段处理事件，而不是捕获阶段。
         } else {
+            // Server-Sent 事件 - 单向消息传递 : Server-Sent 事件指的是网页自动获取来自服务器的更新
             document.getElementById("result").innerHTML = "抱歉，你的浏览器不支持 server-sent 事件...";
         }
         /************************以上是SSE的JS************************/
         $(function () {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/sse/findAll');
+            xhr.open('GET', '/good/getAll');
             xhr.send(null);//发送请求
-            xhr.onreadystatechange = function () {
-                //2是空响应，3是响应一部分，4是响应完成
+            xhr.onreadystatechange = function () { // 当请求被发送到服务器时，我们需要执行一些基于响应的任务。每当 readyState 改变时，就会触发 onreadystatechange 事件。readyState 属性存有 XMLHttpRequest 的状态信息
+                //0:请求未初始化,1:服务器连接已建立,2:是请求已接收,3:请求处理中,4:求已完成,且响应已就绪
                 if (xhr.readyState > 2) {
-                    //这儿可以使用response与responseText，因为我接口返回的就是String数据，所以选择responseText
+                    //这里可以使用response与responseText，因为接口返回的就是String数据，所以选择responseText
                     var newData = xhr.response.substr(xhr.seenBytes);
                     try {
                         console.log("xhr.readyState:"+xhr.readyState)
@@ -43,13 +43,13 @@
                     newData = newData.substring(0, newData.length - 1);
                     var data = newData.split("#");
                     //显示加载次数，和大小
-                    $("#dataModule").append("第" + time + "次数据响应" + data.length + "条          ");
+                    $("#dataModule").append("第" + time + "次数据响应" + data.length + "条,");
 
-                    $("#note").append("<div style='clear: both;'>第" + time + "次数据响应" + data.length + "条</div><div id='note" + time + "' style='width: 100%;'></div>");
+                    $("#note").append("<div style='clear: both;'>第" + time + "次数据响应" + data.length + "条</div><div id='note" + time + "' style='width: 10%;'></div>");
                     var html = "";
                     for (var i = 0; i < data.length; i++) {
                         var obj = JSON.parse(data[i])
-                        html = html + "<div style='margin-left: 10px;margin-top: 10px; width: 80px;height: 1180px;background-color: gray;float: left;'>" + obj.name + "</div>";
+                        html = html + "<div style='margin-left: 10px;margin-top: 10px; width: 40px;height: 40px;background-color: gray;float: left;'>" + obj.name + "</div>";
                     }
                     $("#note" + time).html(html);
                     time++;
